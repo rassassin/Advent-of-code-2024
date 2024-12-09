@@ -25,11 +25,23 @@ function findDifferencesBetweenValues(arr1, arr2) {
   return totalDifference;
 }
 
+const findNumOccurences = (arr) => {
+  const occurencesObj = arr.reduce((acc, curr) => {
+    acc[curr] = (acc[curr] || 0) + 1;
+    return acc;
+  }, {});
+  return occurencesObj;
+};
+
 function dayOne(input) {
   const { columnOne, columnTwo } = getNumberColumns(input);
-  const sortedColumnOne = sortArrayByValue(columnOne);
-  const sortedColumnTwo = sortArrayByValue(columnTwo);
-  return findDifferencesBetweenValues(sortedColumnOne, sortedColumnTwo);
+  sortedColumnOne = sortArrayByValue(columnOne);
+  sortedColumnTwo = sortArrayByValue(columnTwo);
+  const dayOne = findDifferencesBetweenValues(sortedColumnOne, sortedColumnTwo);
+
+  const columnTwoOccurencesObj = findNumOccurences(sortedColumnTwo);
+  return sortedColumnOne.length;
+  // for(const eac)
 }
 
 console.log(dayOne(input));
