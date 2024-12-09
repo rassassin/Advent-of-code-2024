@@ -33,15 +33,25 @@ const findNumOccurences = (arr) => {
   return occurencesObj;
 };
 
-function dayOne(input) {
+const colOneOccurences = (sortedColumnOne, columnTwoOccurencesObj) => {
+  let count = 0;
+  for (const number of sortedColumnOne) {
+    if (columnTwoOccurencesObj.hasOwnProperty(number)) {
+      count = count + number * columnTwoOccurencesObj[number];
+    }
+  }
+  return count;
+};
+
+function solveDayOne(input) {
   const { columnOne, columnTwo } = getNumberColumns(input);
   sortedColumnOne = sortArrayByValue(columnOne);
   sortedColumnTwo = sortArrayByValue(columnTwo);
-  const dayOne = findDifferencesBetweenValues(sortedColumnOne, sortedColumnTwo);
+  const partOne = findDifferencesBetweenValues(sortedColumnOne, sortedColumnTwo);
 
   const columnTwoOccurencesObj = findNumOccurences(sortedColumnTwo);
-  return sortedColumnOne.length;
-  // for(const eac)
+  const partTwo = colOneOccurences(sortedColumnOne, columnTwoOccurencesObj);
+  return { partOne, partTwo };
 }
 
-console.log(dayOne(input));
+console.log(solveDayOne(input));
