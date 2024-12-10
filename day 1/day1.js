@@ -45,6 +45,7 @@ const colOneOccurences = (sortedColumnOne, columnTwoOccurencesObj) => {
 
 function solveDayOne(input) {
   const { columnOne, columnTwo } = getNumberColumns(input);
+  console.log(columnOne);
   sortedColumnOne = sortArrayByValue(columnOne);
   sortedColumnTwo = sortArrayByValue(columnTwo);
   const partOne = findDifferencesBetweenValues(sortedColumnOne, sortedColumnTwo);
@@ -54,4 +55,4 @@ function solveDayOne(input) {
   return { partOne, partTwo };
 }
 
-console.log(solveDayOne(input));
+solveDayOne(input);
