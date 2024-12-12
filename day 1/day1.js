@@ -1,7 +1,7 @@
 const fs = require("fs");
 const input = fs.readFileSync("./day1input.txt", "utf-8").split("\n");
 
-function getNumberColumns(input) {
+function parseInput(input) {
   const columnOne = [];
   const columnTwo = [];
   for (const line of input) {
@@ -44,10 +44,9 @@ const colOneOccurences = (sortedColumnOne, columnTwoOccurencesObj) => {
 };
 
 function solveDayOne(input) {
-  const { columnOne, columnTwo } = getNumberColumns(input);
-  console.log(columnOne);
-  sortedColumnOne = sortArrayByValue(columnOne);
-  sortedColumnTwo = sortArrayByValue(columnTwo);
+  const { columnOne, columnTwo } = parseInput(input);
+  const sortedColumnOne = sortArrayByValue(columnOne);
+  const sortedColumnTwo = sortArrayByValue(columnTwo);
   const partOne = findDifferencesBetweenValues(sortedColumnOne, sortedColumnTwo);
 
   const columnTwoOccurencesObj = findNumOccurences(sortedColumnTwo);
