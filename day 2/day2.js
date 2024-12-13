@@ -2,14 +2,8 @@ const fs = require("fs");
 const input = fs.readFileSync("./day2input.txt", "utf-8").split("/\r?\n/");
 
 function parseInput(input) {
-  let listOfLevelsAsStrings = [];
-  let listOfLevelsAsArrayOfStrings = [];
-  for (const line of input) {
-    listOfLevelsAsStrings = line.split(/\r?\n+/);
-  }
-  for (let i = 0; i < listOfLevelsAsStrings.length; i++) {
-    listOfLevelsAsArrayOfStrings[i] = [listOfLevelsAsStrings[i]];
-  }
+  let listOfLevelsAsStrings = input.map((line) => line.split(/\r?\n+/));
+  let listOfLevelsAsArrayOfStrings = listOfLevelsAsStrings.map((stringArray) => stringArray.map((str) => [str]));
   return listOfLevelsAsArrayOfStrings;
 }
 
@@ -28,3 +22,5 @@ function solveDayTwo(input) {
 }
 
 solveDayTwo(input);
+
+// let listOfLevelsAsArrayOfStrings = listOfLevelsAsStrings.map((string, i) => (string[i] = [string[i]]));
