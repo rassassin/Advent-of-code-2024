@@ -1,7 +1,8 @@
 const fs = require("fs");
-const input = fs.readFileSync("./day1input.txt", "utf-8").split("\n");
+const input = fs.readFileSync("./day1input.txt", "utf-8").split("\r\n");
 
 function parseInput(input) {
+  console.log(input);
   const columnOne = [];
   const columnTwo = [];
   for (const line of input) {
@@ -54,4 +55,4 @@ function solveDayOne(input) {
   return { partOne, partTwo };
 }
 
-solveDayOne(input);
+console.log(solveDayOne(input));
