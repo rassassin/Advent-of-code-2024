@@ -2,24 +2,15 @@ const fs = require("fs");
 const input = fs.readFileSync("./day2input.txt", "utf-8").split("/\r?\n/");
 
 function parseInput(input) {
-  let listOfLevelsAsStrings = [];
+  const inputAsNumArray = [];
+
   for (const line of input) {
-    listOfLevelsAsStrings = line.split(/\r?\n+/);
-  }
-
-  let listOfLevelsAsArrayOfStrings = [];
-  for (let i = 0; i < listOfLevelsAsStrings.length; i++) {
-    listOfLevelsAsArrayOfStrings[i] = [listOfLevelsAsStrings[i]];
-  }
-
-  let inputAsNumArray = [];
-  for (const level of listOfLevelsAsArrayOfStrings) {
-    for (const report of level) {
-      const value = report.split(" ").map(Number);
-      inputAsNumArray.push(value);
+    for (const report of line.split(/\r?\n+/)) {
+      inputAsNumArray.push(report.split(" ").map(Number));
     }
   }
-  return inputAsNumArray;
+
+  return [inputAsNumArray];
 }
 
 // function parseInput(input) {
@@ -35,9 +26,7 @@ function parseInput(input) {
 
 const getSafeLevelsCount = (parsedReports) => {
   for (const report of parsedReports) {
-    console.log(report);
-    for (const level of report) {
-    }
+    console.log(report[0][0]);
   }
 };
 
