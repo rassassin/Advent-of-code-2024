@@ -10,12 +10,14 @@ function parseInput(input) {
     }
   }
 
-  return [inputAsNumArray];
+  return inputAsNumArray;
 }
 
 const getSafeLevelsCount = (parsedReports) => {
-  for (const report of parsedReports) {
-    console.log(report[0][0]);
+  for (let i = 0; i < parsedReports.length; i++) {
+    for (let j = 0; j < parsedReports[i].length; j++) {
+      console.log(parsedReports[i][j]);
+    }
   }
 };
 
