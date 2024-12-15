@@ -17,18 +17,14 @@ const difference = (a, b) => {
 
 const arrayIncreasingOrDecreasing = (arr) => {
   let isIncreasing = true;
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i + 1] == undefined) break;
-    if (arr[i] < arr[i + 1]) return !isIncreasing;
-  }
-  if (isIncreasing) return isIncreasing;
-
   let isDecreasing = true;
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i + 1] == undefined) break;
-    if (arr[i] < arr[i + 1]) return !isDecreasing;
+
+  for (let i = 0; i < arr.length - 1; i++) {
+    if (arr[i] < arr[i + 1]) isDecreasing = false;
+    if (arr[i] > arr[i + 1]) isIncreasing = false;
   }
-  if (isDecreasing) return isDecreasing;
+
+  return isIncreasing || isDecreasing;
 };
 
 const getSafeLevelsCount = (parsedReports) => {
@@ -39,7 +35,7 @@ const getSafeLevelsCount = (parsedReports) => {
       if (!arrayDecreasingOrIncreasing) break;
       const differenceBetweenNumbers = difference(parsedReports[i][j], parsedReports[i][j + 1]);
       if (differenceBetweenNumbers < 1 || differenceBetweenNumbers > 3) break;
-      if (j == parsedReports[i].length - 1) {
+      if (j === parsedReports[i].length - 1) {
         console.log(parsedReports[i]);
         count++;
       }
