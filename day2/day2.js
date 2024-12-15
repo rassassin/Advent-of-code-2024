@@ -3,30 +3,58 @@ const input = fs.readFileSync("./day2input.txt", "utf-8").split("/\r?\n/");
 
 function parseInput(input) {
   const inputAsNumArray = [];
-
   for (const line of input) {
     for (const report of line.split(/\r?\n+/)) {
       inputAsNumArray.push(report.split(" ").map(Number));
     }
   }
-
   return inputAsNumArray;
 }
 
+const difference = (a, b) => {
+  return Math.abs(a - b);
+};
+
+const arrayIncreasingOrDecreasing = (arr) => {
+  let isIncreasing = true;
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i + 1] == undefined) break;
+    if (arr[i] < arr[i + 1]) return !isIncreasing;
+  }
+  if (isIncreasing) return isIncreasing;
+
+  let isDecreasing = true;
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i + 1] == undefined) break;
+    if (arr[i] < arr[i + 1]) return !isDecreasing;
+  }
+  if (isDecreasing) return isDecreasing;
+};
+
 const getSafeLevelsCount = (parsedReports) => {
+  let count = 0;
   for (let i = 0; i < parsedReports.length; i++) {
     for (let j = 0; j < parsedReports[i].length; j++) {
-      console.log(parsedReports[i][j]);
+      const arrayDecreasingOrIncreasing = arrayIncreasingOrDecreasing(parsedReports[i]);
+      if (!arrayDecreasingOrIncreasing) break;
+      const differenceBetweenNumbers = difference(parsedReports[i][j], parsedReports[i][j + 1]);
+      if (differenceBetweenNumbers < 1 || differenceBetweenNumbers > 3) break;
+      if (j == parsedReports[i].length - 1) {
+        console.log(parsedReports[i]);
+        count++;
+      }
     }
   }
+  return count;
 };
 
 function solveDayTwo(input) {
   const parsedReports = parseInput(input);
   const numberOfSafeLevels = getSafeLevelsCount(parsedReports);
+  return numberOfSafeLevels;
 }
 
-solveDayTwo(input);
+console.log(solveDayTwo(input));
 
 // function parseInput(input) {
 //   let listOfLevelsAsStrings = [];
