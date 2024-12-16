@@ -11,8 +11,12 @@ function parseInput(input) {
   return inputAsNumArray;
 }
 
-const difference = (a, b) => {
-  return Math.abs(a - b);
+const difference = (arr) => {
+  for (let i = 0; i < arr.length - 1; i++) {
+    const differenceBetweenNumbers = Math.abs(arr[i] - arr[i + 1]);
+    if (differenceBetweenNumbers < 1 || differenceBetweenNumbers > 3) return false;
+  }
+  return true;
 };
 
 const arrayIncreasingOrDecreasing = (arr) => {
@@ -30,16 +34,10 @@ const arrayIncreasingOrDecreasing = (arr) => {
 const getSafeLevelsCount = (parsedReports) => {
   let count = 0;
   for (let i = 0; i < parsedReports.length; i++) {
-    for (let j = 0; j < parsedReports[i].length; j++) {
-      const arrayDecreasingOrIncreasing = arrayIncreasingOrDecreasing(parsedReports[i]);
-      if (!arrayDecreasingOrIncreasing) break;
-      const differenceBetweenNumbers = difference(parsedReports[i][j], parsedReports[i][j + 1]);
-      if (differenceBetweenNumbers < 1 || differenceBetweenNumbers > 3) break;
-      if (j === parsedReports[i].length - 1) {
-        console.log(parsedReports[i]);
-        count++;
-      }
-    }
+    const validOrder = arrayIncreasingOrDecreasing(parsedReports[i]);
+    const validDifference = difference(parsedReports[i]);
+
+    if (validOrder && validDifference) count++;
   }
   return count;
 };
@@ -51,37 +49,3 @@ function solveDayTwo(input) {
 }
 
 console.log(solveDayTwo(input));
-
-// function parseInput(input) {
-//   let listOfLevelsAsStrings = [];
-//   for (const line of input) {
-//     listOfLevelsAsStrings = line.split(/\r?\n+/);
-//   }
-
-//   let listOfLevelsAsArrayOfStrings = [];
-//   for (let i = 0; i < listOfLevelsAsStrings.length; i++) {
-//     listOfLevelsAsArrayOfStrings[i] = [listOfLevelsAsStrings[i]];
-//   }
-
-//   let inputAsNumArray = [];
-//   for (const level of listOfLevelsAsArrayOfStrings) {
-//     for (const report of level) {
-//       const value = report.split(" ").map(Number);
-//       inputAsNumArray.push(value);
-//     }
-//   }
-//   return [inputAsNumArray];
-// }
-
-// function parseInput(input) {
-//   let listOfLevelsAsStrings = input.map((line) => line.split(/\r?\n+/));
-//   const listOfLevelsAsArrayOfStrings = listOfLevelsAsStrings.map((stringArray) => stringArray.map((str) => [str]));
-//   let newVar = [];
-//   for (const level of listOfLevelsAsArrayOfStrings[0][0]) {
-//     newVar = level.split(" ");
-//   }
-
-//   return listOfLevelsAsArrayOfStrings;
-// }
-
-// let listOfLevelsAsArrayOfStrings = listOfLevelsAsStrings.map((string, i) => (string[i] = [string[i]]));
