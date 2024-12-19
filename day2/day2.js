@@ -11,14 +11,6 @@ function parseInput(input) {
   return inputAsNumArray;
 }
 
-const getSafeLevelsCount = (parsedReports) => {
-  let count = 0;
-  for (let i = 0; i < parsedReports.length; i++) {
-    if (isReportSafe(parsedReports[i])) count++;
-  }
-  return count;
-};
-
 const isReportSafe = (arr) => {
   let isIncreasing = true;
   let isDecreasing = true;
@@ -27,29 +19,39 @@ const isReportSafe = (arr) => {
     if (arr[i] < arr[i + 1]) isDecreasing = false;
     if (arr[i] > arr[i + 1]) isIncreasing = false;
     if (!isDecreasing && !isIncreasing) {
-      return false;
+      return [false, i];
     }
     const differenceBetweenNumbers = Math.abs(arr[i] - arr[i + 1]);
     if (differenceBetweenNumbers < 1 || differenceBetweenNumbers > 3) {
-      return false;
+      return [false, i];
     }
   }
 
-  return true;
+  return [true, -1];
+};
+
+const getSafeLevelsCount = (parsedReports) => {
+  let count = 0;
+  for (let i = 0; i < parsedReports.length; i++) {
+    const [isSafe, _] = isReportSafe(parsedReports[i]);
+    if (isSafe) count++;
+  }
+  return count;
 };
 
 const problemDampener = (parsedReports) => {
   let count = 0;
   for (let i = 0; i < parsedReports.length; i++) {
     const report = parsedReports[i];
-    const isSafe = isReportSafe(report);
+    const [isSafe, badIndex] = isReportSafe(report);
     if (isSafe) {
       count++;
       continue;
     }
-    for (let skip = 0; skip < report.length; skip++) {
+    for (let skip = badIndex - 1; skip <= badIndex + 1; skip++) {
       const skipped = [...report.slice(0, skip), ...report.slice(skip + 1)];
-      if (isReportSafe(skipped)) {
+      const [isSafe, _] = isReportSafe(skipped);
+      if (isSafe) {
         count++;
         break;
       }
