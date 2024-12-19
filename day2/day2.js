@@ -11,50 +11,15 @@ function parseInput(input) {
   return inputAsNumArray;
 }
 
-const difference = (arr) => {
-  for (let i = 0; i < arr.length - 1; i++) {
-    const differenceBetweenNumbers = Math.abs(arr[i] - arr[i + 1]);
-    if (differenceBetweenNumbers < 1 || differenceBetweenNumbers > 3) return false;
-  }
-  return true;
-};
-
-const arrayIncreasingOrDecreasing = (arr) => {
-  let isIncreasing = true;
-  let isDecreasing = true;
-
-  for (let i = 0; i < arr.length - 1; i++) {
-    if (arr[i] < arr[i + 1]) isDecreasing = false;
-    if (arr[i] > arr[i + 1]) isIncreasing = false;
-    if (!isDecreasing && !isIncreasing) break;
-  }
-
-  return isIncreasing || isDecreasing;
-};
-
 const getSafeLevelsCount = (parsedReports) => {
   let count = 0;
   for (let i = 0; i < parsedReports.length; i++) {
-    const validOrder = arrayIncreasingOrDecreasing(parsedReports[i]);
-    const validDifference = difference(parsedReports[i]);
-
-    if (validOrder && validDifference) count++;
+    if (isReportSafe(parsedReports[i])) count++;
   }
   return count;
 };
 
-const differenceDampened = (arr) => {
-  for (let i = 0; i < arr.length; i++) {
-    const differenceBetweenNumbers = Math.abs(arr[i] - arr[i + 1]);
-    if (differenceBetweenNumbers < 1 || differenceBetweenNumbers > 3) {
-      arr.splice(i + 1, 1);
-      break;
-    }
-  }
-  return;
-};
-
-const arrayIncreasingOrDecreasingDampened = (arr) => {
+const isReportSafe = (arr) => {
   let isIncreasing = true;
   let isDecreasing = true;
 
@@ -62,26 +27,32 @@ const arrayIncreasingOrDecreasingDampened = (arr) => {
     if (arr[i] < arr[i + 1]) isDecreasing = false;
     if (arr[i] > arr[i + 1]) isIncreasing = false;
     if (!isDecreasing && !isIncreasing) {
-      arr.splice(i + 1, 1);
-
-      return true;
+      return false;
+    }
+    const differenceBetweenNumbers = Math.abs(arr[i] - arr[i + 1]);
+    if (differenceBetweenNumbers < 1 || differenceBetweenNumbers > 3) {
+      return false;
     }
   }
 
-  return false;
+  return true;
 };
 
 const problemDampener = (parsedReports) => {
   let count = 0;
   for (let i = 0; i < parsedReports.length; i++) {
-    const arrayOrderDampened = arrayIncreasingOrDecreasingDampened(parsedReports[i]);
-    if (arrayOrderDampened) differenceDampened(parsedReports[i]);
-    const validOrder = arrayIncreasingOrDecreasing(parsedReports[i]);
-    const validDifference = difference(parsedReports[i]);
-
-    if (validOrder && validDifference) {
-      console.log(parsedReports[i]);
+    const report = parsedReports[i];
+    const isSafe = isReportSafe(report);
+    if (isSafe) {
       count++;
+      continue;
+    }
+    for (let skip = 0; skip < report.length; skip++) {
+      const skipped = [...report.slice(0, skip), ...report.slice(skip + 1)];
+      if (isReportSafe(skipped)) {
+        count++;
+        break;
+      }
     }
   }
   return count;
@@ -91,7 +62,7 @@ function solveDayTwo(input) {
   const parsedReports = parseInput(input);
   const solvePartOne = getSafeLevelsCount(parsedReports);
   const solvePartTwo = problemDampener(parsedReports);
-  return solvePartTwo;
+  return { solvePartOne, solvePartTwo };
 }
 
 console.log(solveDayTwo(input));
