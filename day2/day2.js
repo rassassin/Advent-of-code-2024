@@ -1,5 +1,5 @@
 const fs = require("fs");
-const input = fs.readFileSync("./day2input.txt", "utf-8").split("/\r?\n/");
+const input = fs.readFileSync("./day2input.txt", "utf-8").split(/\r?\n/);
 
 function parseInput(input) {
   const inputAsNumArray = [];
