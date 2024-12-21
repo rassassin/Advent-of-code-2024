@@ -7,8 +7,18 @@ const parseInput = (input) =>
     .map((i) => Number(i))
     .filter((elm) => elm);
 
-const solveDayThree = (input) => {
-  const getInputAsNumArray = parseInput(input);
+const solvePartOne = (numArray) => {
+  let count = 0;
+  for (let i = 0; i < numArray.length; i += 2) {
+    count += numArray[i] * numArray[i + 1];
+  }
+  return count;
 };
 
-console.log(parseInput(input));
+const solveDayThree = (input) => {
+  const getInputAsNumArray = parseInput(input);
+  const partOne = solvePartOne(getInputAsNumArray);
+  return partOne;
+};
+
+console.log(solveDayThree(input));
