@@ -16,6 +16,7 @@ function getOnlyNumbers(arrOfStrings) {
   }
   return onlyRelevantNumsAsStrings;
 }
+
 const parseInput = (input) => {
   const splitAllMulStrings = input[0].split("mul(");
   const onlyNumbersAsStrings = getOnlyNumbers(splitAllMulStrings);
@@ -33,10 +34,7 @@ const parseInput = (input) => {
 const solvePartOne = (numArray) => {
   let count = 0;
   for (let i = 0; i < numArray.length; i += 2) {
-    console.log("Num1:", numArray[i]);
-    console.log("Num2:", numArray[i + 1]);
-    count = count + numArray[i] * numArray[i + 1];
-    // console.log(count);
+    count += numArray[i] * numArray[i + 1];
   }
   return count;
 };
