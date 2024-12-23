@@ -31,6 +31,15 @@ const parseInput = (input) => {
   return arr.flat();
 };
 
+const parseInputForPart2 = (input) => {
+  const splitAllMulStrings = input[0].split("do()");
+  const newArr = [];
+  for (let i = 0; i < splitAllMulStrings.length; i++) {
+    newArr.push(splitAllMulStrings[i].split("mul("));
+  }
+  console.log(splitAllMulStrings);
+};
+
 const solvePartOne = (numArray) => {
   let count = 0;
   for (let i = 0; i < numArray.length; i += 2) {
@@ -45,4 +54,4 @@ const solveDayThree = (input) => {
   return partOne;
 };
 
-console.log(solveDayThree(input));
+console.log(parseInputForPart2(input));
