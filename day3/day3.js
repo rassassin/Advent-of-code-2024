@@ -8,11 +8,11 @@ function getOnlyNumbers(arrOfStrings) {
     for (let j = 0; j < arrOfStrings[i].length; j++) {
       if (!isNaN(arrOfStrings[i][j]) && arrOfStrings[i][j + 1] === ")") {
         result += arrOfStrings[i][j];
+        onlyRelevantNumsAsStrings.push(result);
         break;
       }
       result += arrOfStrings[i][j];
     }
-    onlyRelevantNumsAsStrings.push(result);
   }
   return onlyRelevantNumsAsStrings;
 }
@@ -31,7 +31,7 @@ function getOnlyNumbersAndStrings(arrOfStrings) {
         onlyRelevantNumsAsStrings.push(result);
         !checkForStringFlag;
       }
-      // if (checkForStringFlag && arrOfStrings[i][j].endsWith(doString)) {
+      // if (!checkForStringFlag && arrOfStrings[i][j].endsWith(doString)) {
       // }
       if (checkForStringFlag) result += arrOfStrings[i][j];
     }
@@ -41,7 +41,7 @@ function getOnlyNumbersAndStrings(arrOfStrings) {
 
 const parseInput = (input) => {
   const splitAllMulStrings = input[0].split("mul(");
-  const onlyNumbersAsStrings = getOnlyNumbersAndStrings(splitAllMulStrings);
+  const onlyNumbersAsStrings = getOnlyNumbers(splitAllMulStrings);
   let arr = [];
   for (let i = 0; i < onlyNumbersAsStrings.length; i++) {
     let temp = onlyNumbersAsStrings[i]
