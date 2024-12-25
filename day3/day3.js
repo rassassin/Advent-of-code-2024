@@ -17,9 +17,31 @@ function getOnlyNumbers(arrOfStrings) {
   return onlyRelevantNumsAsStrings;
 }
 
+function getOnlyNumbersAndStrings(arrOfStrings) {
+  let onlyRelevantNumsAsStrings = [];
+  const doString = "do()";
+  const dontString = "don't()";
+
+  for (let i = 0; i < arrOfStrings.length; i++) {
+    let checkForStringFlag = true;
+    let result = "";
+    for (let j = 0; j < arrOfStrings[i].length; j++) {
+      if (!isNaN(arrOfStrings[i][j]) && arrOfStrings[i][j + 1] === ")" && checkForStringFlag) {
+        result += arrOfStrings[i][j];
+        onlyRelevantNumsAsStrings.push(result);
+        !checkForStringFlag;
+      }
+      // if (checkForStringFlag && arrOfStrings[i][j].endsWith(doString)) {
+      // }
+      if (checkForStringFlag) result += arrOfStrings[i][j];
+    }
+  }
+  return onlyRelevantNumsAsStrings;
+}
+
 const parseInput = (input) => {
   const splitAllMulStrings = input[0].split("mul(");
-  const onlyNumbersAsStrings = getOnlyNumbers(splitAllMulStrings);
+  const onlyNumbersAsStrings = getOnlyNumbersAndStrings(splitAllMulStrings);
   let arr = [];
   for (let i = 0; i < onlyNumbersAsStrings.length; i++) {
     let temp = onlyNumbersAsStrings[i]
@@ -50,4 +72,4 @@ const solveDayThree = (input) => {
   return partOne;
 };
 
-console.log(parseInputForPart2(input));
+console.log(solveDayThree(input));
