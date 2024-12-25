@@ -32,11 +32,7 @@ const parseInput = (input) => {
 };
 
 const parseInputForPart2 = (input) => {
-  const splitAllMulStrings = input[0].split("do()");
-  const newArr = [];
-  for (let i = 0; i < splitAllMulStrings.length; i++) {
-    newArr.push(splitAllMulStrings[i].split("mul("));
-  }
+  const splitAllMulStrings = input[0].split(/mul\(|(don't\(\)|do\(\))/).filter((elm) => elm);
   console.log(splitAllMulStrings);
 };
 
