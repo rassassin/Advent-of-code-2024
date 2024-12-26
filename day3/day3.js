@@ -29,11 +29,15 @@ function getOnlyNumbersAndStrings(arrOfStrings) {
       if (!isNaN(arrOfStrings[i][j]) && arrOfStrings[i][j + 1] === ")" && checkForStringFlag) {
         result += arrOfStrings[i][j];
         onlyRelevantNumsAsStrings.push(result);
-        !checkForStringFlag;
+        checkForStringFlag = false;
       }
-      // if (!checkForStringFlag && arrOfStrings[i][j].endsWith(doString)) {
-      // }
-      if (checkForStringFlag) result += arrOfStrings[i][j];
+      if (!checkForStringFlag && result.endsWith(doString)) {
+        onlyRelevantNumsAsStrings.push(doString);
+      }
+      if (!checkForStringFlag && result.endsWith(dontString)) {
+        onlyRelevantNumsAsStrings.push(dontString);
+      }
+      result += arrOfStrings[i][j];
     }
   }
   return onlyRelevantNumsAsStrings;
