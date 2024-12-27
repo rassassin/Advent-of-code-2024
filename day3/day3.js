@@ -17,32 +17,6 @@ function getOnlyNumbers(arrOfStrings) {
   return onlyRelevantNumsAsStrings;
 }
 
-function getOnlyNumbersAndStrings(arrOfStrings) {
-  let onlyRelevantNumsAsStrings = [];
-  const doString = "do()";
-  const dontString = "don't()";
-
-  for (let i = 0; i < arrOfStrings.length; i++) {
-    let checkForStringFlag = true;
-    let result = "";
-    for (let j = 0; j < arrOfStrings[i].length; j++) {
-      if (!isNaN(arrOfStrings[i][j]) && arrOfStrings[i][j + 1] === ")" && checkForStringFlag) {
-        result += arrOfStrings[i][j];
-        onlyRelevantNumsAsStrings.push(result);
-        checkForStringFlag = false;
-      }
-      if (!checkForStringFlag && result.endsWith(doString)) {
-        onlyRelevantNumsAsStrings.push(doString);
-      }
-      if (!checkForStringFlag && result.endsWith(dontString)) {
-        onlyRelevantNumsAsStrings.push(dontString);
-      }
-      result += arrOfStrings[i][j];
-    }
-  }
-  return onlyRelevantNumsAsStrings;
-}
-
 const parseInput = (input) => {
   const splitAllMulStrings = input[0].split("mul(");
   const onlyNumbersAsStrings = getOnlyNumbers(splitAllMulStrings);
@@ -57,11 +31,6 @@ const parseInput = (input) => {
   return arr.flat();
 };
 
-const parseInputForPart2 = (input) => {
-  const splitAllMulStrings = input[0].split(/mul\(|(don't\(\)|do\(\))/).filter((elm) => elm);
-  console.log(splitAllMulStrings);
-};
-
 const solvePartOne = (numArray) => {
   let count = 0;
   for (let i = 0; i < numArray.length; i += 2) {
@@ -70,10 +39,57 @@ const solvePartOne = (numArray) => {
   return count;
 };
 
+const getOnlyNumbersAndStrings = (arrOfStrings) => {
+  let onlyRelevantNumsAsStrings = [];
+  const doString = "do()";
+  const dontString = "don't()";
+
+  for (let i = 0; i < arrOfStrings.length; i++) {
+    let checkForStringFlag = true;
+    let result = "";
+    for (let j = 0; j < arrOfStrings[i].length; j++) {
+      if (!isNaN(arrOfStrings[i][j]) && arrOfStrings[i][j + 1] === ")" && !/[a-zA-Z]/.test(result) && checkForStringFlag) {
+        result += arrOfStrings[i][j];
+        onlyRelevantNumsAsStrings.push(result);
+        checkForStringFlag = false;
+      }
+      if (!checkForStringFlag && result.endsWith(doString)) onlyRelevantNumsAsStrings.push(doString);
+      if (!checkForStringFlag && result.endsWith(dontString)) onlyRelevantNumsAsStrings.push(dontString);
+
+      result += arrOfStrings[i][j];
+    }
+  }
+  return onlyRelevantNumsAsStrings;
+};
+
+const parseInputForPartTwo = (input) => {
+  const splitAllMulStrings = input[0].split("mul(");
+  const getNumbersAndInstructionsStrings = getOnlyNumbersAndStrings(splitAllMulStrings);
+  let arr = [];
+  for (let i = 0; i < getNumbersAndInstructionsStrings.length; i++) {
+    let temp = getNumbersAndInstructionsStrings[i].split(",").map((i) => (isNaN(Number(i)) ? i : Number(i)));
+    arr.push(temp);
+  }
+  return arr.flat();
+};
+
+const solvePartTwo = (numArray) => {
+  let count = 0;
+  let continueToCount = true;
+  for (let i = 0; i < numArray.length; i += 2) {
+    if (numArray[i] == "don't") continueToCount = false;
+    if (continueToCount && !isNaN(numArray[i])) count += numArray[i] * numArray[i + 1];
+    if (numArray[i] == "do()") continueToCount = true;
+  }
+  return count;
+};
+
 const solveDayThree = (input) => {
   const getInputAsNumArray = parseInput(input);
   const partOne = solvePartOne(getInputAsNumArray);
-  return partOne;
+  const getPartTwoInput = parseInputForPartTwo(input);
+  const partTwo = solvePartTwo(getPartTwoInput);
+  return partTwo;
 };
 
 console.log(solveDayThree(input));
