@@ -76,10 +76,17 @@ const parseInputForPartTwo = (input) => {
 const solvePartTwo = (numArray) => {
   let count = 0;
   let continueToCount = true;
-  for (let i = 0; i < numArray.length; i += 2) {
-    if (numArray[i] == "don't") continueToCount = false;
-    if (continueToCount && !isNaN(numArray[i])) count += numArray[i] * numArray[i + 1];
-    if (numArray[i] == "do()") continueToCount = true;
+  for (let i = 0; i < numArray.length; i++) {
+    console.log(numArray[i]);
+    if (numArray[i] == "don't()") {
+      continueToCount = false;
+    }
+    if (numArray[i] == "do()") {
+      continueToCount = true;
+    }
+    if (continueToCount && !isNaN(numArray[i]) && !isNaN(numArray[i + 1])) {
+      count += numArray[i] * numArray[i + 1];
+    }
   }
   return count;
 };
@@ -92,4 +99,14 @@ const solveDayThree = (input) => {
   return partTwo;
 };
 
-console.log(solveDayThree(input));
+const countDoAndDonts = (numArray) => {
+  const stringIndicesList = [];
+  for (let i = 0; i < numArray.length; i++) {
+    if (typeof numArray[i] === "string") {
+      stringIndicesList.push(i + 1);
+    }
+  }
+  return stringIndicesList;
+};
+
+console.table(solveDayThree(input));
