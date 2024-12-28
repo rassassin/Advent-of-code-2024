@@ -19,6 +19,7 @@ function getOnlyNumbers(arrOfStrings) {
 
 const parseInput = (input) => {
   const splitAllMulStrings = input[0].split("mul(");
+  console.table(splitAllMulStrings);
   const onlyNumbersAsStrings = getOnlyNumbers(splitAllMulStrings);
   let arr = [];
   for (let i = 0; i < onlyNumbersAsStrings.length; i++) {
@@ -53,8 +54,8 @@ const getOnlyNumbersAndStrings = (arrOfStrings) => {
         onlyRelevantNumsAsStrings.push(result);
         checkForStringFlag = false;
       }
-      if (!checkForStringFlag && result.endsWith(doString)) onlyRelevantNumsAsStrings.push(doString);
-      if (!checkForStringFlag && result.endsWith(dontString)) onlyRelevantNumsAsStrings.push(dontString);
+      if (result.endsWith(doString)) onlyRelevantNumsAsStrings.push(doString);
+      if (result.endsWith(dontString)) onlyRelevantNumsAsStrings.push(dontString);
 
       result += arrOfStrings[i][j];
     }
@@ -77,7 +78,6 @@ const solvePartTwo = (numArray) => {
   let count = 0;
   let continueToCount = true;
   for (let i = 0; i < numArray.length; i++) {
-    console.log(numArray[i]);
     if (numArray[i] == "don't()") {
       continueToCount = false;
     }
@@ -95,18 +95,18 @@ const solveDayThree = (input) => {
   const getInputAsNumArray = parseInput(input);
   const partOne = solvePartOne(getInputAsNumArray);
   const getPartTwoInput = parseInputForPartTwo(input);
-  const partTwo = solvePartTwo(getPartTwoInput);
+  const partTwo = countDoAndDonts(getPartTwoInput);
   return partTwo;
 };
 
 const countDoAndDonts = (numArray) => {
   const stringIndicesList = [];
   for (let i = 0; i < numArray.length; i++) {
-    if (typeof numArray[i] === "string") {
+    if (typeof numArray[i] == "string") {
       stringIndicesList.push(i + 1);
     }
   }
   return stringIndicesList;
 };
 
-console.table(solveDayThree(input));
+console.log(solveDayThree(input));
