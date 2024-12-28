@@ -9,7 +9,6 @@ function getOnlyNumbers(arrOfStrings) {
       if (!isNaN(arrOfStrings[i][j]) && arrOfStrings[i][j + 1] === ")") {
         result += arrOfStrings[i][j];
         onlyRelevantNumsAsStrings.push(result);
-        break;
       }
       result += arrOfStrings[i][j];
     }
@@ -19,7 +18,6 @@ function getOnlyNumbers(arrOfStrings) {
 
 const parseInput = (input) => {
   const splitAllMulStrings = input[0].split("mul(");
-  console.table(splitAllMulStrings);
   const onlyNumbersAsStrings = getOnlyNumbers(splitAllMulStrings);
   let arr = [];
   for (let i = 0; i < onlyNumbersAsStrings.length; i++) {
@@ -46,16 +44,17 @@ const getOnlyNumbersAndStrings = (arrOfStrings) => {
   const dontString = "don't()";
 
   for (let i = 0; i < arrOfStrings.length; i++) {
-    let checkForStringFlag = true;
     let result = "";
     for (let j = 0; j < arrOfStrings[i].length; j++) {
-      if (!isNaN(arrOfStrings[i][j]) && arrOfStrings[i][j + 1] === ")" && !/[a-zA-Z]/.test(result) && checkForStringFlag) {
+      if (!isNaN(arrOfStrings[i][j]) && arrOfStrings[i][j + 1] === ")" && !/[a-zA-Z]/.test(result)) {
         result += arrOfStrings[i][j];
         onlyRelevantNumsAsStrings.push(result);
-        checkForStringFlag = false;
       }
-      if (result.endsWith(doString)) onlyRelevantNumsAsStrings.push(doString);
-      if (result.endsWith(dontString)) onlyRelevantNumsAsStrings.push(dontString);
+      if (arrOfStrings[i].slice(j, j + doString.length) === doString) {
+        onlyRelevantNumsAsStrings.push(doString);
+      } else if (arrOfStrings[i].slice(j, j + dontString.length) === dontString) {
+        onlyRelevantNumsAsStrings.push(dontString);
+      }
 
       result += arrOfStrings[i][j];
     }
@@ -68,7 +67,13 @@ const parseInputForPartTwo = (input) => {
   const getNumbersAndInstructionsStrings = getOnlyNumbersAndStrings(splitAllMulStrings);
   let arr = [];
   for (let i = 0; i < getNumbersAndInstructionsStrings.length; i++) {
-    let temp = getNumbersAndInstructionsStrings[i].split(",").map((i) => (isNaN(Number(i)) ? i : Number(i)));
+    let temp = getNumbersAndInstructionsStrings[i].split(",").map((i) => {
+      if (!isNaN(Number(i))) {
+        return Number(i);
+      } else if (i == "do()" || i == "don't()") {
+        return i;
+      }
+    });
     arr.push(temp);
   }
   return arr.flat();
@@ -80,8 +85,7 @@ const solvePartTwo = (numArray) => {
   for (let i = 0; i < numArray.length; i++) {
     if (numArray[i] == "don't()") {
       continueToCount = false;
-    }
-    if (numArray[i] == "do()") {
+    } else if (numArray[i] == "do()") {
       continueToCount = true;
     }
     if (continueToCount && !isNaN(numArray[i]) && !isNaN(numArray[i + 1])) {
@@ -93,7 +97,7 @@ const solvePartTwo = (numArray) => {
 
 const solveDayThree = (input) => {
   const getInputAsNumArray = parseInput(input);
-  const partOne = solvePartOne(getInputAsNumArray);
+  const partOne = countDoAndDonts(getInputAsNumArray);
   const getPartTwoInput = parseInputForPartTwo(input);
   const partTwo = countDoAndDonts(getPartTwoInput);
   return partTwo;
@@ -102,11 +106,11 @@ const solveDayThree = (input) => {
 const countDoAndDonts = (numArray) => {
   const stringIndicesList = [];
   for (let i = 0; i < numArray.length; i++) {
-    if (typeof numArray[i] == "string") {
-      stringIndicesList.push(i + 1);
+    if (typeof numArray[i] != "string") {
+      stringIndicesList.push(numArray[i]);
     }
   }
   return stringIndicesList;
 };
 
-console.log(solveDayThree(input));
+console.table(solveDayThree(input));
