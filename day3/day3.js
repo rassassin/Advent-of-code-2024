@@ -69,7 +69,6 @@ const getOnlyNumbersAndStrings = (arrOfStrings) => {
 
     if (dosAndDonts.length > 0) {
       onlyRelevantNumsAsStrings.push(dosAndDonts[dosAndDonts.length - 1]);
-
       dosAndDonts = [];
     }
   }
@@ -112,7 +111,6 @@ const solvePartTwo = (numArray) => {
       continue;
     }
     if (continueToCount && !isNaN(numArray[i]) && !isNaN(numArray[i + 1])) {
-      console.log(numArray[i], numArray[i + 1]);
       count += numArray[i] * numArray[i + 1];
       i++;
     }
@@ -125,8 +123,7 @@ const solveDayThree = (input) => {
   const partOne = solvePartOne(getInputAsNumArray);
   const getPartTwoInput = parseInputForPartTwo(input);
   const partTwo = solvePartTwo(getPartTwoInput);
-  console.table(getPartTwoInput);
-  return partTwo;
+  return { partOne, partTwo };
 };
 
 console.log(solveDayThree(input));
