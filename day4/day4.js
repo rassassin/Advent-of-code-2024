@@ -3,8 +3,12 @@ const input = fs.readFileSync("./day4input.txt", "utf-8").split("\n");
 const xDir = [-1, -1, -1, 0, 0, 1, 1, 1];
 const yDir = [-1, 0, 1, -1, 1, -1, 0, 1];
 
-const xUpdatedDir = [-1, -1, 1, 1];
-const yUpdatedDir = [-1, 1, -1, 1];
+const vectors = [
+  [-1, -1],
+  [-1, 1],
+  [1, -1],
+  [1, 1],
+];
 
 const parseDataTo2DArray = (input) => input.map((row) => row.split(""));
 
@@ -43,32 +47,35 @@ function searchForWord(twoDimensionalArray, word) {
   return count;
 }
 
-const findMasPattern = (twoDimensionalArray, row, col) => {
-  let count = 0;
+function getCross(i, j, twoDimensionalArray) {
+  const cross = [];
+  for (const vec of vectors) {
+    const I = i + vec[0];
+    const J = j + vec[1];
+    cross.push(twoDimensionalArray[I][J]);
+  }
+  return cross.join("");
+}
 
-  for (let dir = 0; dir < 4; dir++) {
-    let currX = row + xUpdatedDir[dir];
-    let currY = col + xUpdatedDir[dir];
-    for (let i = 0; i < twoDimensionalArray.length; i++) {
-      if (currX >= twoDimensionalArray.length || currX < 0 || currY >= twoDimensionalArray[i].length || currY < 0) break;
+const validCrosses = ["MMSS", "MSMS", "SSMM", "SMSM"];
+
+const countMasPattern = (twoDimensionalArray) => {
+  let count = 0;
+  for (let i = 1; i < twoDimensionalArray.length - 1; i++) {
+    for (let j = 1; j < twoDimensionalArray[i].length - 1; j++) {
+      if (twoDimensionalArray[i][j] === "A") {
+        const cross = getCross(i, j, twoDimensionalArray);
+        count += +validCrosses.includes(cross);
+      }
     }
   }
-};
-
-const searchForXmas = (twoDimensionalArray) => {
-  let count = 0;
-
-  for (let i = 0; i < twoDimensionalArray.length; i++) {
-    for (let j = 0; j < twoDimensionalArray[i].length; j++) {
-      if (twoDimensionalArray[i][j] === "A") count += findMasPattern(twoDimensionalArray, i, j);
-    }
-  }
+  return count;
 };
 
 const solveDayFour = (input) => {
   const twoDimensionalArray = parseDataTo2DArray(input);
   const partOne = searchForWord(twoDimensionalArray, "XMAS");
-  const partTwo = searchForXmas(twoDimensionalArray);
+  const partTwo = countMasPattern(twoDimensionalArray);
   return { partOne, partTwo };
 };
 
