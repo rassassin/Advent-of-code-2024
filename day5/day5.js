@@ -52,28 +52,27 @@ function solvePartOne(parsedInput) {
 }
 
 const solvePartTwo = (rules, incorrectLines) => {
-  let result = 0;
-  for (let l = 0; l < incorrectLines.length; l++) {
-    let swapped = true;
-    while (swapped) {
-      swapped = false;
-      const line = incorrectLines[l];
-      for (let i = 0; i < line.length - 1; i++) {
-        const num = line[i];
-        if (rules[num] != undefined) {
-          const slice = line.slice(i + 1);
-          for (let j = 0; j < rules[num].length; j++) {
-            const ruleNum = rules[num][j];
-            if (slice.includes(ruleNum)) {
-              [line[i], line[j]] = [line[j], line[i]];
-              swapped = true;
-              incorrectLines[l] = line;
-            }
-          }
+  const ruleLines = [];
+  for (let i = 0; i < incorrectLines.length; i++) {
+    const line = incorrectLines[i];
+    const ruleCounts = [];
+    for (let j = 0; j < line.length; j++) {
+      const num = line[j];
+      let count = 0;
+      if (rules[num] != undefined) {
+        for (let k = 0; k < line.length; k++) {
+          if (j == k) continue;
+          count += +rules[num].includes(line[k]);
         }
       }
+      ruleCounts.push({ count, num });
     }
-    result += getMiddleNum(line);
+    ruleLines.push(ruleCounts);
+  }
+  let result = 0;
+  for (let i = 0; i < ruleLines.length; i++) {
+    ruleLines[i].sort((a, b) => b.count - a.count);
+    result += getMiddleNum(ruleLines[i].map((v) => v.num));
   }
   return result;
 };
