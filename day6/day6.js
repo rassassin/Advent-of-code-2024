@@ -6,10 +6,12 @@ const parseDataTo2DArray = (input) => input.map((row) => row.split(""));
 function findGuardPos(parsedInput) {
   for (let y = 0; y < parsedInput.length; y++) {
     for (let x = 0; x < parsedInput[y].length; x++) {
-      if (x === "^") return [x, y];
+      if (parsedInput[y][x] === "^") return [x, y];
     }
   }
 }
+
+function changeGuardDirection(x, y) {}
 
 function solvePartOne(parsedInput) {
   const [x, y] = findGuardPos(parsedInput);
@@ -19,7 +21,6 @@ function solvePartOne(parsedInput) {
 function solveDaySix(input) {
   const parsedInput = parseDataTo2DArray(input);
   const dayOne = solvePartOne(parsedInput);
-  return dayOne;
 }
 
 console.log(solveDaySix(input));
