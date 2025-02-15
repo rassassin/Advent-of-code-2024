@@ -24,38 +24,60 @@ function changeGuardDirection(guardDirection) {
   if (guardDirection == guardDirections[3]) return guardDirections[0];
 }
 
-function hasGuardLeftMap(twoDimensionalArray, row, col) {
-  if (row < 0 || row >= twoDimensionalArray.length || col < 0 || col >= twoDimensionalArray[row].length) {
-    return false;
-  }
-  return true;
+function isGuardStillInMap(twoDimensionalArray, row, col) {
+  return !(row < 0 || row >= twoDimensionalArray.length || col < 0 || col >= twoDimensionalArray[row].length);
 }
 
 function solvePartOne(parsedInput) {
   let directionGuardIsMoving = guardDirections[0];
   const currentGuardPosition = findGuardPos(parsedInput);
   let isGuardInMap = true;
-  let steps = 0;
+  const history = {};
+  history[currentGuardPosition.join(",")] = true;
   while (isGuardInMap) {
     currentGuardPosition[0] += directionGuardIsMoving[0];
     currentGuardPosition[1] += directionGuardIsMoving[1];
-    console.log(parsedInput[currentGuardPosition[0]][currentGuardPosition[1]]);
-    if (parsedInput[currentGuardPosition[0]][currentGuardPosition[1]] === "#") {
+    isGuardInMap = isGuardStillInMap(parsedInput, currentGuardPosition[0], currentGuardPosition[1]);
+    if (!isGuardInMap) break;
+    if (parsedInput[currentGuardPosition[1]][currentGuardPosition[0]] == "#") {
+      currentGuardPosition[0] -= directionGuardIsMoving[0];
+      currentGuardPosition[1] -= directionGuardIsMoving[1];
       directionGuardIsMoving = changeGuardDirection(directionGuardIsMoving);
       continue;
     }
-    isGuardInMap = hasGuardLeftMap(parsedInput, currentGuardPosition[0], currentGuardPosition[1]);
-    console.log(isGuardInMap);
-    if (!isGuardInMap) break;
-    steps++;
+    history[currentGuardPosition.join(",")] = true;
   }
-  return steps;
+  return Object.keys(history).length;
 }
 
 function solveDaySix(input) {
   const parsedInput = parseDataTo2DArray(input);
   const dayOne = solvePartOne(parsedInput);
   return dayOne;
+}
+
+function printGrid(parsedInput, currentGuardPosition, history) {
+  for (let i = 0; i < parsedInput.length; i++) {
+    const row = parsedInput[i];
+    let line = "";
+    for (let j = 0; j < row.length; j++) {
+      const char = row[j];
+      if (char === "#") {
+        line += "#";
+        continue;
+      }
+      if (i == currentGuardPosition[1] && j == currentGuardPosition[0]) {
+        line += "^";
+        continue;
+      }
+      if (history[`${j},${i}`]) {
+        line += "X";
+        continue;
+      }
+      line += ".";
+    }
+    console.log(line);
+  }
 }
 
 console.log(solveDaySix(input));
